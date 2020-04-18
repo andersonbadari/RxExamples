@@ -20,7 +20,8 @@ class RxTeste {
 
         // filtra a lista a ser emitida e cria uma lista nova com números pares apenas
         val pairObservable = observable.map { it.filter { it % 2 == 0 } }
-        pairObservable.subscribe { it -> // emite o item
+        pairObservable.subscribe { it ->
+            // emite o item
             // exibe 1 item emitido (lista com numeros pares)
             print("$it")
         }
@@ -34,14 +35,16 @@ class RxTeste {
 
         // filtra a lista a ser emitida e cria uma lista nova com números pares apenas
         val pairObservable = observable.map { it.filter { it % 2 == 0 } }
-        pairObservable.subscribe { it -> // emite o item
+        pairObservable.subscribe { it ->
+            // emite o item
             // exibe 1 item emitido (lista com numeros pares)
             print("$it")
         }
 
         // filtra a lista a ser emitida e cria uma lista nova com números ímpares apenas
         val oddObservable = observable.map { it.filter { it % 2 != 0 } }
-        oddObservable.subscribe { it -> // emite o item
+        oddObservable.subscribe { it ->
+            // emite o item
             // exibe 1 item emitido (lista com numeros ímpares)
             print("$it")
         }
@@ -55,7 +58,8 @@ class RxTeste {
 
         // filtra os itens a serem emitidos. apenas os números pares serao emitidos.
         val oddObservable = observable.filter { it % 2 == 0 }
-        oddObservable.subscribe { it -> // emite os itens
+        oddObservable.subscribe { it ->
+            // emite os itens
             // emitirá 5 itens (os pares)
             print("$it, ")
         }
@@ -103,7 +107,8 @@ class RxTeste {
     fun single_observable_multi_observers() {
 
         // prepara para emitir 1 item (uma lista com 10 membros)
-        val connectableObservable = ConnectableObservable.just(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).publish()
+        val connectableObservable =
+            ConnectableObservable.just(listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).publish()
 
         Thread.sleep(1000)
         connectableObservable.subscribe {
@@ -278,28 +283,12 @@ class RxTeste {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Test
     fun example_in_android_application_1() {
         // success case
 
         class Interactor_1 {
-            fun getUsername(): Observable<String>{
+            fun getUsername(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
                     emitter.onNext("jose silva")
@@ -307,6 +296,7 @@ class RxTeste {
                 }
             }
         }
+
         class ViewModel_1 {
             private val interator = Interactor_1()
             fun getUsername(): Observable<String> {
@@ -328,15 +318,16 @@ class RxTeste {
         // error case
 
         class Interactor_2 {
-            fun getUsername(): Observable<String>{
+            fun getUsername(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
-                    val error = 1/0 // will throw an exception
+                    val error = 1 / 0 // will throw an exception
                     emitter.onNext("jose silva")
                     emitter.onComplete()
                 }
             }
         }
+
         class ViewModel_2 {
             private val interator = Interactor_2()
             fun getUsername(): Observable<String> {
@@ -382,27 +373,15 @@ class RxTeste {
 
     }
 
-    @Test
-    fun example_in_android_application_4() {
-        // Exemplo de duas requisicoes em paralelo esperando uma única chegada
-
-    }
-
-    @Test
-    fun example_in_android_application_5() {
-        // Exemplo de duas requisicoes em que a segunda tem como entrada um parametro da primeira
-
-    }
-
 
     /**
      * Exemplo com duas requisicoes dependentes uma da outra
      */
     @Test
-    fun example_in_android_application_6_flat_map() {
+    fun example_in_android_application_4_flat_map() {
 
         class Repository {
-            fun getUserIdByCPF(cpf: String): Observable<String>{
+            fun getUserIdByCPF(cpf: String): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
                     println("getUserIdByCPF")
@@ -410,6 +389,7 @@ class RxTeste {
                     emitter.onComplete()
                 }
             }
+
             fun getUserNameById(userId: String): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
@@ -454,7 +434,7 @@ class RxTeste {
 
 
     @Test
-    fun example_in_android_application_7_multiple_clicks() {
+    fun example_in_android_application_5_multiple_clicks() {
 
         Observable.just(1, 2, 3, 4) // usuário clicando 4 vezes muito rapidamente
             // em um intervalo de 300 milissegundos, emite apenas o primeiro item
@@ -471,21 +451,22 @@ class RxTeste {
      * Exemplo com duas requisicoes independentes uma da outra
      */
     @Test
-    fun example_in_android_application_8_flat_map() {
+    fun example_in_android_application_6_flat_map() {
 
         class Repository {
-            fun getUserIdByCPF(): Observable<String>{
+            fun getUserIdByCPF(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1500) // delay in network
-                    println("getUserIdByCPF: "+Thread.currentThread().toString().plus("\n"))
+                    println("getUserIdByCPF: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("josé ") // return user name
                     emitter.onComplete()
                 }
             }
+
             fun getUserNameById(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
-                    println("getUserNameById: "+Thread.currentThread().toString().plus("\n"))
+                    println("getUserNameById: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("silva") // return user surname
                     emitter.onComplete()
                 }
@@ -524,52 +505,7 @@ class RxTeste {
             .subscribe() {
                 val username = it ?: ""
                 print("blockingSubscribe: $username\n") // myTextView.text = username
-                println("blockingSubscribe: "+Thread.currentThread().toString().plus("\n"))
-            }
-
-    }
-
-    @Test
-    fun multi_threading_1() {
-
-        Observable.just(1, 2) // emite 4 itens na thread principal
-            .map {
-                print("Valor $it sendo emitido na thread principal: ".plus(Thread.currentThread().toString()).plus("\n"))
-                it
-            }
-            .observeOn(Schedulers.newThread()) // observáveis (quem consome os dados) estarão nesta nova thread
-            .subscribe {
-                print("Valor $it sendo emitido na thread paralela: ".plus(Thread.currentThread().toString()).plus("\n"))
-            }
-
-    }
-
-    @Test
-    fun multi_threading_2() {
-
-        Observable.just(1, 2) // emite 2 itens na thread...
-            .map {
-                print("Valor $it sendo emitido na thread paralela: ".plus(Thread.currentThread().toString()).plus("\n"))
-                it
-            }
-            .subscribeOn(Schedulers.newThread()) // observáveis (fonte de dados) emitirão itens nesta nova thread
-            .blockingSubscribe { // observadores consomem os itens emitidos na thread principal
-                print("Valor $it sendo emitido na thread principal: ".plus(Thread.currentThread().toString()).plus("\n"))
-            }
-
-    }
-
-    @Test
-    fun multi_threading_3() {
-
-        Observable.just(1, 2) // emite 2 itens na thread...
-            .subscribeOn(Schedulers.newThread()) // // observáveis (fonte de dados) emitirão itens nesta nova thread
-            .map {
-                print("Valor $it sendo emitido na thread paralela: ".plus(Thread.currentThread().toString()).plus("\n"))
-                it
-            }
-            .blockingSubscribe { // observadores consomem os itens emitidos na thread principal
-                print("Valor $it sendo emitido na thread principal: ".plus(Thread.currentThread().toString()).plus("\n"))
+                println("blockingSubscribe: " + Thread.currentThread().toString().plus("\n"))
             }
 
     }
@@ -578,21 +514,22 @@ class RxTeste {
      * Exemplo com duas requisicoes independentes uma da outra (feitas em outra thread)
      */
     @Test
-    fun example_in_android_application_8_multi_threading() {
+    fun example_in_android_application_7_multi_threading() {
 
         class Repository {
-            fun getUserIdByCPF(): Observable<String>{
+            fun getUserIdByCPF(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1500) // delay in network
-                    println("getUserIdByCPF: "+Thread.currentThread().toString().plus("\n"))
+                    println("getUserIdByCPF: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("josé ") // return user name
                     emitter.onComplete()
                 }
             }
+
             fun getUserNameById(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
-                    println("getUserNameById: "+Thread.currentThread().toString().plus("\n"))
+                    println("getUserNameById: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("silva") // return user surname
                     emitter.onComplete()
                 }
@@ -630,7 +567,78 @@ class RxTeste {
             .blockingSubscribe {
                 val username = it ?: ""
                 print("blockingSubscribe: $username\n") // myTextView.text = username
-                println("blockingSubscribe: "+Thread.currentThread().toString().plus("\n"))
+                println("blockingSubscribe: " + Thread.currentThread().toString().plus("\n"))
+            }
+
+    }
+
+    @Test
+    fun multi_threading_1() {
+
+        Observable.just(1, 2) // emite 4 itens na thread principal
+            .map {
+                print(
+                    "Valor $it sendo emitido na thread principal: ".plus(Thread.currentThread().toString()).plus(
+                        "\n"
+                    )
+                )
+                it
+            }
+            .observeOn(Schedulers.newThread()) // observáveis (quem consome os dados) estarão nesta nova thread
+            .subscribe {
+                print(
+                    "Valor $it sendo emitido na thread paralela: ".plus(Thread.currentThread().toString()).plus(
+                        "\n"
+                    )
+                )
+            }
+
+    }
+
+    @Test
+    fun multi_threading_2() {
+
+        Observable.just(1, 2) // emite 2 itens na thread...
+            .map {
+                print(
+                    "Valor $it sendo emitido na thread paralela: ".plus(Thread.currentThread().toString()).plus(
+                        "\n"
+                    )
+                )
+                it
+            }
+            .subscribeOn(Schedulers.newThread()) // observáveis (fonte de dados) emitirão itens nesta nova thread
+            .blockingSubscribe {
+                // observadores consomem os itens emitidos na thread principal
+                print(
+                    "Valor $it sendo emitido na thread principal: ".plus(Thread.currentThread().toString()).plus(
+                        "\n"
+                    )
+                )
+            }
+
+    }
+
+    @Test
+    fun multi_threading_3() {
+
+        Observable.just(1, 2) // emite 2 itens na thread...
+            .subscribeOn(Schedulers.newThread()) // // observáveis (fonte de dados) emitirão itens nesta nova thread
+            .map {
+                print(
+                    "Valor $it sendo emitido na thread paralela: ".plus(Thread.currentThread().toString()).plus(
+                        "\n"
+                    )
+                )
+                it
+            }
+            .blockingSubscribe {
+                // observadores consomem os itens emitidos na thread principal
+                print(
+                    "Valor $it sendo emitido na thread principal: ".plus(Thread.currentThread().toString()).plus(
+                        "\n"
+                    )
+                )
             }
 
     }
@@ -638,7 +646,7 @@ class RxTeste {
     /**
      *
      *
-     * That’s it for hot and cold observables. Remember, data-driven is cold, event-driven is hot.
+     * That’s it for hot and cold observables. Remember, data-driven is cold, event-driven is hot. (Medium)
      *
      */
 
@@ -660,16 +668,14 @@ class RxTeste {
     }
 
     @Test
-    fun hot_observable () {
+    fun hot_observable() {
 
         // emite itens quando algum evento ocorre, como um clique de botao (interessante para eventos de UI)
-
         val originalObservable = Observable.just(1, 2, 3).publish()
 
         originalObservable.subscribe {
             println("primeiro subscribe: $it")
         }
-
 
         originalObservable.subscribe {
             println("segundo subscribe: $it")
