@@ -448,25 +448,26 @@ class RxTeste {
 
 
     /**
-     * Exemplo com duas requisicoes independentes uma da outra
+     * Exemplo com duas requisicoes independentes uma da outra (itens sao emitidos de forma independente)
+     * observáveis e observadores estao na thread principal.
      */
     @Test
-    fun example_in_android_application_6_flat_map() {
+    fun example_in_android_application_6() {
 
         class Repository {
-            fun getUserIdByCPF(): Observable<String> {
+            fun getUserName(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1500) // delay in network
-                    println("getUserIdByCPF: " + Thread.currentThread().toString().plus("\n"))
+                    println("getUserName: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("josé ") // return user name
                     emitter.onComplete()
                 }
             }
 
-            fun getUserNameById(): Observable<String> {
+            fun getUserSurname(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
-                    println("getUserNameById: " + Thread.currentThread().toString().plus("\n"))
+                    println("getUserSurname: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("silva") // return user surname
                     emitter.onComplete()
                 }
@@ -478,15 +479,14 @@ class RxTeste {
 
             fun getUser(): Observable<String> {
                 return getUserNameObservable().mergeWith(getUserSurnameObservable())
-                // espera ambos observáveis serem emitidos na ordem especificada
             }
 
             private fun getUserNameObservable(): Observable<String> {
-                return repository.getUserIdByCPF()
+                return repository.getUserName()
             }
 
             private fun getUserSurnameObservable(): Observable<String> {
-                return repository.getUserNameById()
+                return repository.getUserSurname()
             }
         }
 
@@ -500,8 +500,6 @@ class RxTeste {
         // in activity, fragment, etc
         val vm = ViewModel()
         vm.getUser()
-//            .subscribeOn(Schedulers.newThread())
-//            .blockingSubscribe() {
             .subscribe() {
                 val username = it ?: ""
                 print("blockingSubscribe: $username\n") // myTextView.text = username
@@ -511,25 +509,26 @@ class RxTeste {
     }
 
     /**
-     * Exemplo com duas requisicoes independentes uma da outra (feitas em outra thread)
+     * Exemplo com duas requisicoes independentes uma da outra
+     * observáveis estao em outra thread e os observadores estao na thread principal.
      */
     @Test
     fun example_in_android_application_7_multi_threading() {
 
         class Repository {
-            fun getUserIdByCPF(): Observable<String> {
+            fun getUserName(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1500) // delay in network
-                    println("getUserIdByCPF: " + Thread.currentThread().toString().plus("\n"))
+                    println("getUserName: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("josé ") // return user name
                     emitter.onComplete()
                 }
             }
 
-            fun getUserNameById(): Observable<String> {
+            fun getUserSurname(): Observable<String> {
                 return Observable.create { emitter ->
                     Thread.sleep(1000) // delay in network
-                    println("getUserNameById: " + Thread.currentThread().toString().plus("\n"))
+                    println("getUserSurname: " + Thread.currentThread().toString().plus("\n"))
                     emitter.onNext("silva") // return user surname
                     emitter.onComplete()
                 }
@@ -541,15 +540,14 @@ class RxTeste {
 
             fun getUser(): Observable<String> {
                 return getUserNameObservable().mergeWith(getUserSurnameObservable())
-                // espera ambos observáveis serem emitidos na ordem especificada
             }
 
             private fun getUserNameObservable(): Observable<String> {
-                return repository.getUserIdByCPF()
+                return repository.getUserName()
             }
 
             private fun getUserSurnameObservable(): Observable<String> {
-                return repository.getUserNameById()
+                return repository.getUserSurname()
             }
         }
 
