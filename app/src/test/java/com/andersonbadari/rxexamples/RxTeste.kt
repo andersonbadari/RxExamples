@@ -662,21 +662,14 @@ class RxTeste {
     fun hot_observable() {
 
         // emite itens, mesmo sem ter subscribers
-        val originalObservable = Observable.just(1, 2, 3).publish()
 
-        // emite itens, mas nao tem subscribers
-        originalObservable.connect()
+        val originalObservable = Observable.interval(1, TimeUnit.SECONDS)
+        val hotObservable = originalObservable.subscribeOn(Schedulers.newThread()).publish()
+        hotObservable.connect() // inicia emissao de itens
 
-        originalObservable.subscribe {
-            println("primeiro subscribe: $it")
-        }
-
-        originalObservable.subscribe {
-            println("segundo subscribe: $it")
-        }
-
-        originalObservable.connect()
-
+        Thread.sleep(3000)
+        hotObservable.subscribe { println("Observador: $it") } // itens 0 e 1 já foram emitidos nessa altura
+        Thread.sleep(3000)
     }
 
 }
