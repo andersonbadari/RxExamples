@@ -641,17 +641,10 @@ class RxTeste {
 
     }
 
-    /**
-     *
-     *
-     * That’s it for hot and cold observables. Remember, data-driven is cold, event-driven is hot. (Medium)
-     *
-     */
-
     @Test
     fun cold_observable() {
 
-        // emite itens na subscricao (interessante para buscar dados de alguma fonte)
+        // emite itens apenas na subscricao (interessante para buscar dados de alguma fonte)
 
         val originalObservable = Observable.just(1, 2, 3)
 
@@ -668,8 +661,11 @@ class RxTeste {
     @Test
     fun hot_observable() {
 
-        // emite itens quando algum evento ocorre, como um clique de botao (interessante para eventos de UI)
+        // emite itens, mesmo sem ter subscribers
         val originalObservable = Observable.just(1, 2, 3).publish()
+
+        // emite itens, mas nao tem subscribers
+        originalObservable.connect()
 
         originalObservable.subscribe {
             println("primeiro subscribe: $it")
