@@ -644,7 +644,7 @@ class RxTeste {
     @Test
     fun cold_observable() {
 
-        // emite itens apenas na subscricao (interessante para buscar dados de alguma fonte)
+        // emite itens apenas na subscricao
 
         val originalObservable = Observable.just(1, 2, 3)
 
